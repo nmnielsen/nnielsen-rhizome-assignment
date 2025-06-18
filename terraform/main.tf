@@ -22,3 +22,11 @@ module "tf_state" {
   aws_region = var.aws_region
   project    = var.project
 }
+
+
+module "ingest_observations" {
+  source = "./ingest_observations"
+
+  aws_region = var.aws_region
+  project    = var.project
+}

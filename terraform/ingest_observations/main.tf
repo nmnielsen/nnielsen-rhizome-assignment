@@ -48,7 +48,7 @@ module "validator_lambda" {
   function_name = "validator_lambda"
   handler       = "handlers.lambda_handler_validator"
   runtime       = "python3.9"
-  role          = aws_iam_role.lambda_role.arn
+  policy          = aws_iam_role.lambda_role.arn
   source_path = "../../lambdas/"
 }
 
@@ -57,7 +57,7 @@ module "filterer_lambda" {
   function_name = "filterer_lambda"
   handler       = "handlers.lambda_handler_filterer"
   runtime       = "python3.9"
-  role          = aws_iam_role.lambda_role.arn
+  policy          = aws_iam_role.lambda_role.arn
   source_path = "../../lambdas/"
 }
 
@@ -66,7 +66,7 @@ module "formatter_lambda" {
   function_name = "formatter_lambda"
   handler       = "handlers.lambda_handler_formatter"
   runtime       = "python3.9"
-  role          = aws_iam_role.lambda_role.arn
+  policy          = aws_iam_role.lambda_role.arn
   source_path = "../../lambdas/"
 }
 
