@@ -54,7 +54,7 @@ def observation_validator(event, context):
     error_rate = validator.calculate_percent_of_rows_with_errors(validity_df)
     logger.info(f"Total error rate: {error_rate:.2f}%")
 
-    wr.s3.to_parquet(validity_df, path=output_s3_uri, index=False)
+    wr.s3.to_parquet(validity_df, path=output_s3_uri)
 
     return {
         's3_uri': output_s3_uri,
@@ -82,7 +82,7 @@ def observation_filterer(event, context):
     )
     filtered_df = filterer.filter()
 
-    wr.s3.to_parquet(filtered_df, path=output_s3_uri, index=False)
+    wr.s3.to_parquet(filtered_df, path=output_s3_uri)
 
     return output_s3_uri
 
@@ -102,7 +102,7 @@ def observation_formatter(event, context):
     formatter = ObservationFormatter(df)
     formatted_df = formatter.format()
 
-    wr.s3.to_parquet(formatted_df, path=output_s3_uri, index=False)
+    wr.s3.to_parquet(formatted_df, path=output_s3_uri)
 
     return output_s3_uri
 

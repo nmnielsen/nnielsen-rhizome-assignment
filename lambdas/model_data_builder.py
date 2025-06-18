@@ -6,7 +6,6 @@ import pandas as pd
 class ModelDFBuilder:
     BASE_FEATURES = [
         'DEWP',
-        'FRSHTT',
         'GUST',
         'MAX',
         'MIN',

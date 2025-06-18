@@ -72,7 +72,7 @@ def model_trainer(event, context):
     model_s3_interface.save_model_to_s3(
         model=model,
         bucket_name=os.environ["MODEL_BUCKET"],
-        s3_key=f"models/{event['location_name']}/{event['run_timestamp']}/model_type={model_type}/model.joblib"
+        s3_key=f"models/{event['location_name']}/{event['run_timestamp']}/model_type={model_type}/model.pkl"
     )
     prediction_results_s3_uri = f"s3://{os.environ['MODEL_BUCKET']}/prediction_results/location={event['location_name']}/run_timestamp={event['run_timestamp']}/results.parquet"
     wr.s3.to_parquet(prediction_results_df, path=prediction_results_s3_uri, index=False)
