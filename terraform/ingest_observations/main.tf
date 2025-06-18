@@ -55,10 +55,12 @@ resource "aws_iam_role_policy_attachment" "lambda_s3_policy_attachment" {
 module "validator_lambda" {
   source = "terraform-aws-modules/lambda/aws"
   function_name = "validator_lambda"
-  handler       = "handlers.observation_validator"
+  handler       = "observation_handlers.observation_validator"
   runtime       = "python3.9"
   policy          = aws_iam_role.lambda_role.arn
   source_path = "../lambdas/"
+  timeout = 180
+  memory_size = 1024
 
   layers = [
     "arn:aws:lambda:us-east-1:336392948345:layer:AWSSDKPandas-Python39:29"
@@ -68,10 +70,12 @@ module "validator_lambda" {
 module "filterer_lambda" {
   source = "terraform-aws-modules/lambda/aws"
   function_name = "filterer_lambda"
-  handler       = "handlers.observation_filterer"
+  handler       = "observation_handlers.observation_filterer"
   runtime       = "python3.9"
   policy          = aws_iam_role.lambda_role.arn
   source_path = "../lambdas/"
+  timeout = 180
+  memory_size = 1024
 
   layers = [
     "arn:aws:lambda:us-east-1:336392948345:layer:AWSSDKPandas-Python39:29"
@@ -81,7 +85,7 @@ module "filterer_lambda" {
 module "formatter_lambda" {
   source = "terraform-aws-modules/lambda/aws"
   function_name = "formatter_lambda"
-  handler       = "handlers.observation_formatter"
+  handler       = "observation_handlers.observation_formatter"
   runtime       = "python3.9"
   policy          = aws_iam_role.lambda_role.arn
   source_path = "../lambdas/"
@@ -94,13 +98,15 @@ module "formatter_lambda" {
 module "step_function_invoker_lambda" {
   source = "terraform-aws-modules/lambda/aws"
   function_name = "observation_ingest_step_function_invoker_lambda"
-  handler       = "handlers.step_function_invoker"
+  handler       = "observation_handlers.step_function_invoker"
   runtime       = "python3.9"
   policy          = aws_iam_role.lambda_role.arn
   source_path = "../lambdas/"
+  timeout = 180
+  memory_size = 1024
 
   layers = [
-      "arn:aws:lambda:us-east-1:336392948345:layer:AWSSDKPandas-Python39:29"
+    "arn:aws:lambda:us-east-1:336392948345:layer:AWSSDKPandas-Python39:29"
   ]
   environment_variables = {
     STEP_FUNCTION_ARN = aws_sfn_state_machine.observation_step_function.arn

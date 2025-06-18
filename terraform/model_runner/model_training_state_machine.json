@@ -1,0 +1,39 @@
+{
+  "Comment": "Step Function to orchestrate Lambda functions",
+  "StartAt": "Relevant Observation Assembler",
+  "States": {
+    "Relevant Observation Assembler": {
+      "Type": "Task",
+      "Resource": "${relevant_observation_assembler_arn}",
+      "Parameters": {
+        "location_name.$": "$.location_name"
+      },
+      "ResultPath": "$.observation_s3_uris_by_station_id",
+      "Next": "Model Data Builder"
+    },
+    "Model Data Builder": {
+      "Type": "Task",
+      "Resource": "${model_data_builder_arn}",
+      "Parameters": {
+        "outcome_s3_uri.$": "$.outcome_s3_uri",
+        "observation_s3_uris_by_station_id.$": "$.observation_s3_uris_by_station_id",
+        "resolution_days.$": "$.resolution_days",
+        "run_timestamp.$": "$$.Execution.StartTime",
+        "location_name.$": "$.location_name"
+      },
+      "ResultPath": "$.model_data_s3_uri",
+      "Next": "Model Trainer"
+    },
+    "Model Trainer": {
+      "Type": "Task",
+      "Resource": "${model_trainer_arn}",
+      "End": true,
+      "Parameters": {
+        "model_type.$": "$.model_type",
+        "model_data_s3_uri": "$.model_data_s3_uri",
+        "test_split_date.$": "$.test_split_date",
+        "model_params.$": "$.model_params"
+      }
+    }
+  }
+}
