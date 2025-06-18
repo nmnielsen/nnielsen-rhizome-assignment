@@ -1,4 +1,4 @@
-from lambdas.validate_observations.handler import ObservationValidator
+from lambdas.observation_validator import ObservationValidator
 
 
 class ObservationFilterer:

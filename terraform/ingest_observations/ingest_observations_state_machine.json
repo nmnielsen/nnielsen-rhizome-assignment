@@ -1,0 +1,16 @@
+{
+  "Comment": "Step Function to process observation files",
+  "StartAt": "Formatter",
+  "States": {
+    "Formatter": {
+      "Type": "Task",
+      "Resource": "${formatter_lambda_arn}",
+      "Next": "Filterer"
+    },
+    "Filterer": {
+      "Type": "Task",
+      "Resource": "${filterer_lambda_arn}",
+      "End": true
+    }
+  }
+}
