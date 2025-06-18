@@ -79,12 +79,17 @@ class ObservationValidator:
         }
 
     def validate(self) -> pd.DataFrame:
-        validity = pd.DataFrame(True, index=self.df.index, columns=self.df.columns)
+        validity_df = pd.DataFrame(True, index=self.df.index, columns=self.df.columns)
 
         for col, checks in self.validation_map.items():
             if col in self.df.columns:
                 for check in checks:
                     result = check(df=self.df, col_name=col)
-                    validity[col] &= result
+                    validity_df[col] &= result
 
-        return validity
+        return validity_df
+
+    @staticmethod
+    def calculate_percent_of_rows_with_errors(validity_df: pd.DataFrame) -> float:
+        return 100 * (~validity_df).mean().mean()
+

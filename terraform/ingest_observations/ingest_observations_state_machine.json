@@ -1,16 +1,58 @@
 {
   "Comment": "Step Function to process observation files",
-  "StartAt": "Formatter",
+  "StartAt": "Extract S3 URI",
   "States": {
-    "Formatter": {
+    "Extract S3 URI": {
+      "Type": "Pass",
+      "ResultPath": "$.raw_s3_uri",
+      "Parameters": {
+        "s3Uri.$": "States.Format('s3://{}/{}', $.Records[0].s3.bucket.name, $.Records[0].s3.object.key)"
+      },
+      "OutputPath": "$.s3Uri",
+      "Next": "Format"
+    },
+    "Format": {
       "Type": "Task",
       "Resource": "${formatter_lambda_arn}",
-      "Next": "Filterer"
+      "Parameters": {
+        "input_s3_uri.$": "$.raw_s3_uri"
+      },
+      "ResultPath": "$.formatted_s3_uri",
+      "Next": "Validate"
     },
-    "Filterer": {
+    "Validate": {
+      "Type": "Task",
+      "Resource": "${validator_lambda_arn}",
+      "Parameters": {
+          "input_s3_uri.$": "$.formatted_s3_uri"
+      },
+      "ResultPath": "$.validation_result",
+      "Next": "Error Rate above Threshold?"
+    },
+    "Error Rate above Threshold?": {
+      "Type": "Choice",
+      "Choices": [
+          {
+            "Variable": "$.validation_result.error_rate",
+            "NumericGreaterThan": 0.1,
+            "Next": "Fail due to Validation Errors"
+          }
+      ],
+      "Default": "Filter"
+    },
+    "Filter": {
       "Type": "Task",
       "Resource": "${filterer_lambda_arn}",
+      "Parameters": {
+        "input_s3_uri.$": "$.formatted_s3_uri",
+        "validation_result_s3_uri.$": "$.validation_result.s3_uri"
+      },
       "End": true
+    },
+    "Fail due to Validation Errors": {
+      "Type": "Fail",
+      "Error": "ValidationError",
+      "Cause": "The validation failed with errors."
     }
   }
 }

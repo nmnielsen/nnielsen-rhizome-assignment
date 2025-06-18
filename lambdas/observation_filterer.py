@@ -1,15 +1,15 @@
 import pandas as pd
 
-from lambdas.observation_validator import ObservationValidator
-
 
 class ObservationFilterer:
-    def __init__(self, df):
+    def __init__(self, df, validation_df=None):
         self.df = df
+        self.validation_df = validation_df
 
     def filter(self):
-        validator = ObservationValidator(self.df)
-        validity_df = validator.validate()
-        filtered_df = self.df.where(validity_df, other=pd.NA)
+        if self.validation_df is not None:
+            filtered_df = self.df.where(self.validation_df, other=pd.NA)
+        else:
+            filtered_df = self.df
 
         return filtered_df

@@ -46,7 +46,7 @@ resource "aws_iam_role_policy_attachment" "lambda_s3_policy_attachment" {
 module "validator_lambda" {
   source = "terraform-aws-modules/lambda/aws"
   function_name = "validator_lambda"
-  handler       = "handlers.lambda_handler_validator"
+  handler       = "handlers.observation_validator"
   runtime       = "python3.9"
   policy          = aws_iam_role.lambda_role.arn
   source_path = "../../lambdas/"
@@ -55,7 +55,7 @@ module "validator_lambda" {
 module "filterer_lambda" {
   source = "terraform-aws-modules/lambda/aws"
   function_name = "filterer_lambda"
-  handler       = "handlers.lambda_handler_filterer"
+  handler       = "handlers.observation_filterer"
   runtime       = "python3.9"
   policy          = aws_iam_role.lambda_role.arn
   source_path = "../../lambdas/"
@@ -64,7 +64,7 @@ module "filterer_lambda" {
 module "formatter_lambda" {
   source = "terraform-aws-modules/lambda/aws"
   function_name = "formatter_lambda"
-  handler       = "handlers.lambda_handler_formatter"
+  handler       = "handlers.observation_formatter"
   runtime       = "python3.9"
   policy          = aws_iam_role.lambda_role.arn
   source_path = "../../lambdas/"
