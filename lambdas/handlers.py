@@ -1,6 +1,10 @@
+import json
 import logging
+import os
 
 import awswrangler as wr
+import boto3
+
 from lambdas.utilities import get_bucket_and_key_from_s3_uri
 from lambdas.observation_validator import ObservationValidator
 from lambdas.observation_filterer import ObservationFilterer
@@ -80,3 +84,27 @@ def observation_formatter(event, context):
     wr.s3.to_parquet(formatted_df, path=output_s3_uri, index=False)
 
     return output_s3_uri
+
+
+@log_invocation_details
+def step_function_invoker(event, context):
+    bucket_name = event['Records'][0]['s3']['bucket']['name']
+    object_key = event['Records'][0]['s3']['object']['key']
+
+    # Step Function input
+    step_function_input = {
+        "input_s3_uri": f"s3://{bucket_name}/{object_key}",
+    }
+
+    stepfunctions_client = boto3.client('stepfunctions')
+
+    # Start Step Function execution
+    response = stepfunctions_client.start_execution(
+        stateMachineArn=os.environ['STEP_FUNCTION_ARN'],
+        input=json.dumps(step_function_input)
+    )
+
+    return {
+        "statusCode": 200,
+        "body": json.dumps(response)
+    }
