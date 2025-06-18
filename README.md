@@ -46,3 +46,12 @@ Much more could be done to help the model capture the extreme variability of the
 
 ![img_5.png](img_5.png)
 ![img_6.png](img_6.png)
+
+
+## Remaining Work
+It's perfect, isn't it? Well, not quite. There are a few outstanding tasks (as opposed to outstanding results):
+- **Model Improvements**: The current model is very naive. More sophisticated models should be implemented and tested.
+- **Data Validation**: The data validation step could be expanded, and a similar processing step function could be created to handle Outcome of Interest files
+- **Deployment**: Terraform deployment is working locally, but Github actions got out-of-sync and I didn't have the time to sort that out.
+- **Lambda Packaging**: You can package scikit-learn, xgboost, and other dependencies into a Lambda layer, but I don't have time to pull on that thread: https://github.com/model-zoo/scikit-learn-lambda
+- **Documentation & Tests**: But of course!
