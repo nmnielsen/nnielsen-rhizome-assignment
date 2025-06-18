@@ -42,6 +42,7 @@ Currently, this script is using an extremely naive model. You can see predicted 
 
 ## Rhizome Models.ipnb
 This Jupyter notebook contains several model variants that improve the accuracy of the model using XGBoost and logarithmic outcomes. It provides a hands-on way to experiment with different modeling techniques and see their impact on prediction accuracy.
-Much more could be done to help the model capture the extremely variability of the outcome of interest. 
+Much more could be done to help the model capture the extreme variability of the outcome of interest.
+
 ![img_5.png](img_5.png)
 ![img_6.png](img_6.png)
