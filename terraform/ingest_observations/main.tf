@@ -50,6 +50,10 @@ module "validator_lambda" {
   runtime       = "python3.9"
   policy          = aws_iam_role.lambda_role.arn
   source_path = "../lambdas/"
+
+  layers = [
+    "arn:aws:lambda:${var.aws_region}:770693421928:layer:AWSDataWrangler-Python39:1"
+  ]
 }
 
 module "filterer_lambda" {
@@ -59,6 +63,10 @@ module "filterer_lambda" {
   runtime       = "python3.9"
   policy          = aws_iam_role.lambda_role.arn
   source_path = "../lambdas/"
+
+  layers = [
+    "arn:aws:lambda:${var.aws_region}:770693421928:layer:AWSDataWrangler-Python39:1"
+  ]
 }
 
 module "formatter_lambda" {
@@ -68,6 +76,10 @@ module "formatter_lambda" {
   runtime       = "python3.9"
   policy          = aws_iam_role.lambda_role.arn
   source_path = "../lambdas/"
+
+  layers = [
+      "arn:aws:lambda:${var.aws_region}:770693421928:layer:AWSDataWrangler-Python39:1"
+  ]
 }
 
 # Step Function
