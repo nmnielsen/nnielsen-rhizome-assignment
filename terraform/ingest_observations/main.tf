@@ -49,7 +49,7 @@ module "validator_lambda" {
   handler       = "handlers.observation_validator"
   runtime       = "python3.9"
   policy          = aws_iam_role.lambda_role.arn
-  source_path = "../../lambdas/"
+  source_path = "../lambdas/"
 }
 
 module "filterer_lambda" {
@@ -58,7 +58,7 @@ module "filterer_lambda" {
   handler       = "handlers.observation_filterer"
   runtime       = "python3.9"
   policy          = aws_iam_role.lambda_role.arn
-  source_path = "../../lambdas/"
+  source_path = "../lambdas/"
 }
 
 module "formatter_lambda" {
@@ -67,7 +67,7 @@ module "formatter_lambda" {
   handler       = "handlers.observation_formatter"
   runtime       = "python3.9"
   policy          = aws_iam_role.lambda_role.arn
-  source_path = "../../lambdas/"
+  source_path = "../lambdas/"
 }
 
 # Step Function
